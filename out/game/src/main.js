@@ -357,7 +357,7 @@ function renderGame() {
     // Render hazards
     for (const knife of getKnives()) {
         if (knife.active) {
-            drawCarvingKnife(ctx, knife.x - cam.x, knife.y, 15, knife.telegraph <= 0);
+            drawCarvingKnife(ctx, knife.x - cam.x, knife.y, 40, knife.telegraph <= 0);
         }
     }
     
@@ -366,7 +366,7 @@ function renderGame() {
     }
     
     for (const c of getCorn()) {
-        drawCorn(ctx, c.x - cam.x, c.y, 20);
+        drawCorn(ctx, c.x - cam.x, c.y, 34);
     }
     
     // Render player (turkey) - scaled to ~100px tall
