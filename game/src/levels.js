@@ -1,5 +1,7 @@
 // Level definitions for three stages
 
+export const GROUND_Y = 570;
+
 const LEVELS = [
     {
         name: 'Farmyard',
