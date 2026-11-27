@@ -235,42 +235,42 @@ function renderGame() {
     // Render obstacles
     for (const obs of (level.obstacles || [])) {
         if (obs.type === 'fence') {
-            drawFence(obs.x - cam.x, 0, 30);
+            drawFence(ctx, obs.x - cam.x, 0, 30);
         } else if (obs.type === 'haystack') {
-            drawHayStack(obs.x - cam.x, obs.y, 40);
+            drawHayStack(ctx, obs.x - cam.x, obs.y, 40);
         } else if (obs.type === 'barn') {
-            drawBarn(obs.x - cam.x, obs.y, 80);
+            drawBarn(ctx, obs.x - cam.x, obs.y, 80);
         } else if (obs.type === 'crate') {
-            drawCrate(obs.x - cam.x, obs.y, 30);
+            drawCrate(ctx, obs.x - cam.x, obs.y, 30);
         } else if (obs.type === 'counter') {
-            drawCounter(obs.x - cam.x, obs.y, 40);
+            drawCounter(ctx, obs.x - cam.x, obs.y, 40);
         } else if (obs.type === 'exit') {
             const isComplete = (window.currentLevel || 0) >= getLevelCount() - 1;
-            drawExit(obs.x - cam.x, obs.y, 50, isComplete);
+            drawExit(ctx, obs.x - cam.x, obs.y, 50, isComplete);
         }
     }
     
     // Render hazards
     for (const knife of getKnives()) {
         if (knife.active) {
-            drawCarvingKnife(knife.x - cam.x, knife.y, 15, knife.telegraph <= 0);
+            drawCarvingKnife(ctx, knife.x - cam.x, knife.y, 15, knife.telegraph <= 0);
         }
     }
     
     for (const oven of getOvens()) {
-        drawOven(oven.x - cam.x, oven.y, oven.size, oven.bursting);
+        drawOven(ctx, oven.x - cam.x, oven.y, oven.size, oven.bursting);
     }
     
     for (const c of getCorn()) {
-        drawCorn(c.x - cam.x, c.y, 20);
+        drawCorn(ctx, c.x - cam.x, c.y, 20);
     }
     
     // Render player (turkey)
-    drawTurkey(player.x - cam.x, player.y, 30, player.facing, 
+    drawTurkey(ctx, player.x - cam.x, player.y, 30, player.facing, 
                player.sprinting, player.hidden, player.animationTime);
     
     // Render farmer
-    drawFarmer(farmer.x - cam.x, farmer.y, 35, farmer.facing, farmer.animationTime);
+    drawFarmer(ctx, farmer.x - cam.x, farmer.y, 35, farmer.facing, farmer.animationTime);
 }
 
 function checkCollisions() {
