@@ -277,12 +277,12 @@ function drawEndScreen(ctx, result) {
         ctx.arc(640, 355, 10, 0, Math.PI);
         ctx.stroke();
         
-        // Confetti
-        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF8C00', '#9B59B6'];
-        for (let i = 0; i < 20; i++) {
+        // Lots of confetti
+        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF8C00', '#9B59B6', '#2ECC71', '#3498DB', '#E74C3C'];
+        for (let i = 0; i < 50; i++) {
             ctx.fillStyle = colors[i % colors.length];
-            const x = 640 + (i - 10) * 30;
-            const y = 450 + Math.sin(i) * 20;
+            const x = 640 + (i - 25) * 20 + Math.random() * 30;
+            const y = 380 + Math.sin(i * 0.5) * 50 + Math.random() * 30;
             ctx.fillRect(x, y, 4, 4);
         }
     }
