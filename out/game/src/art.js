@@ -45,36 +45,8 @@ function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
     }
     ctx.fill();
     
-    // Head
-    ctx.fillStyle = orangeColor;
-    ctx.beginPath();
-    ctx.arc(facing > 0 ? 8 : 8, 0, 5, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Eye
-    ctx.fillStyle = blackColor;
-    ctx.beginPath();
-    ctx.arc(facing > 0 ? 10 : 6, -1, 1.5, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Wattle
-    ctx.fillStyle = redColor;
-    ctx.beginPath();
-    ctx.ellipse(facing > 0 ? 11 : 7, 2, 2, 1.5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Beak
-    ctx.fillStyle = orangeColor;
-    ctx.beginPath();
-    ctx.moveTo(facing > 0 ? 10 : 6, 3);
-    ctx.lineTo(facing > 0 ? 14 : 2, 0);
-    ctx.lineTo(facing > 0 ? 10 : 6, -1);
-    ctx.closePath();
-    ctx.fill();
-    
-    // Tail (fan shaped when sprinting)
+    // Tail (fan shaped when sprinting) - always attached to body
     ctx.fillStyle = featherColor;
-    ctx.save();
     if (sprinting) {
         const fanAngle = 0.3;
         for (let i = 0; i < 6; i++) {
@@ -95,7 +67,6 @@ function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
         ctx.bezierCurveTo(-20, -16, -18, -20, -15, -19);
         ctx.fill();
     }
-    ctx.restore();
     
     // Neck
     ctx.fillStyle = bodyColor;

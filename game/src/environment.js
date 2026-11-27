@@ -1,6 +1,8 @@
 // Draw environment for each stage
 // This fills the 1280x720 frame with full stage backgrounds
 
+import { GROUND_Y } from './levels.js';
+
 function drawEnvironment(ctx, level, camera) {
     const camX = camera.x;
     
@@ -58,45 +60,54 @@ function drawFarmyard(ctx, camX) {
         ctx.stroke();
     }
     
-    // Distant barn silhouette with glowing window
-    drawRealBarn(ctx, 300, 500, 200);
+    // Barn: behind the fence, base at y=545, 260 px wide at x=60..320
+    // Convert world position to screen position
+    const barnWorldX = 60 + camX; // Barn at world x=60
+    const barnScreenX = barnWorldX; // Screen space
+    if (barnScreenX > -50 && barnScreenX < 1280) {
+        drawRealBarn(ctx, barnScreenX, GROUND_Y - 25, 260);
+    }
     
-    // Barn window - lit (hayloft window)
-    ctx.fillStyle = '#ffd54f';
-    ctx.fillRect(385, 380, 35, 25);
-    
-    // Weather vane on barn roof
-    drawWeatherVane(ctx, 500, 280);
+    // Weather vane on barn roof (at top of barn)
+    if (barnScreenX > -50 && barnScreenX < 1280) {
+        drawWeatherVane(ctx, barnScreenX, GROUND_Y - 75, 260);
+    }
     
     // Silo for depth (further back)
-    drawSilo(ctx, 650, 480, 80);
+    const siloWorldX = 350 + camX;
+    const siloScreenX = siloWorldX;
+    if (siloScreenX > -50 && siloScreenX < 1280) {
+        drawSilo(ctx, siloScreenX, GROUND_Y - 25, 100);
+    }
     
-    // Rail fence running the length
-    const fenceStart = (-camX * 0.5) % 100;
+    // Rail fence running the full width at y=520..545
+    const fenceTop = GROUND_Y - 25; // 545
+    const fenceBottom = GROUND_Y - 5; // 565
+    const fenceStart = -camX * 0.5;
     ctx.strokeStyle = '#8b4513';
     ctx.lineWidth = 4;
     
     for (let x = fenceStart; x < 1280 + 200; x += 100) {
         // Vertical posts
         ctx.beginPath();
-        ctx.moveTo(x, 480);
-        ctx.lineTo(x, 530);
+        ctx.moveTo(x, fenceTop);
+        ctx.lineTo(x, fenceBottom);
         ctx.stroke();
         
         // Horizontal rails
         ctx.beginPath();
-        ctx.moveTo(x - 5, 500);
-        ctx.lineTo(x + 5, 500);
+        ctx.moveTo(x - 5, fenceTop + 12);
+        ctx.lineTo(x + 5, fenceTop + 12);
         ctx.stroke();
     }
     
     // Hay bales in various positions
     const hayPositions = [
-        [-camX % 2500 + 200, 450],
-        [-camX % 2500 + 500, 470],
-        [-camX % 2500 + 800, 430],
-        [-camX % 2500 + 1100, 480],
-        [-camX % 2500 + 1400, 440]
+        [-camX % 2500 + 200, GROUND_Y - 40],
+        [-camX % 2500 + 500, GROUND_Y - 30],
+        [-camX % 2500 + 800, GROUND_Y - 50],
+        [-camX % 2500 + 1100, GROUND_Y - 35],
+        [-camX % 2500 + 1400, GROUND_Y - 45]
     ];
     
     for (const [hx, hy] of hayPositions) {
@@ -345,9 +356,11 @@ function drawRealBarn(ctx, x, y, size) {
     ctx.restore();
 }
 
-function drawWeatherVane(ctx, x, y) {
+function drawWeatherVane(ctx, x, y, barnSize) {
     ctx.save();
     ctx.translate(x, y);
+    const scale = barnSize / 100;
+    ctx.scale(scale, scale);
     
     const grayColor = '#696969';
     const redColor = '#B22222';
@@ -400,4 +413,4 @@ function drawSilo(ctx, x, y, size) {
     ctx.restore();
 }
 
-export { drawEnvironment };
+export { drawEnvironment, drawRealBarn, drawWeatherVane, drawSilo };

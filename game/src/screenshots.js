@@ -69,37 +69,48 @@ function setupScreenshotScene() {
     
     if (screenshotMode === 'chase') {
         // Setup chase scene deliberately with fixed positions
-        // Turkey running on the ground
-        getPlayer().x = 400;
+        // All positions are in screen space after camera is applied
+        
+        // Set camera to 0 so world positions = screen positions
+        const cam = getCamera();
+        cam.x = 0;
+        
+        // Turkey: feet at (500, 570), 100 px tall, facing right, running
+        getPlayer().x = 500;
         getPlayer().y = GROUND_Y;
         
-        // Farmer close behind with pitchfork raised
-        getFarmer().x = 350;
+        // Farmer: feet at (250, 570), 150 px tall, facing right, chasing
+        getFarmer().x = 250;
         getFarmer().state = 'chase';
         getFarmer().lastSeenX = getPlayer().x;
         getFarmer().lastSeenY = getPlayer().y;
         
-        setPatrolRoute([
-            { x: 300, y: GROUND_Y },
-            { x: 500, y: GROUND_Y }
-        ]);
+        // Thrown carving knife in the air at (390, 380)
+        spawnKnife(390, 380, 2.5, 0.5);
         
-        // Thrown carving knife in the air (slightly above ground for dramatic effect)
-        spawnKnife(380, GROUND_Y - 50, 2.5, 0.5);
-        
-        // Two ears of corn
-        spawnCorn(320, GROUND_Y);
-        spawnCorn(450, GROUND_Y);
+        // Three ears of corn at (700, 550), (800, 550), (900, 550)
+        spawnCorn(700, GROUND_Y);
+        spawnCorn(800, GROUND_Y);
+        spawnCorn(900, GROUND_Y);
     }
     
     if (screenshotMode === 'kitchen') {
-        getPlayer().x = 1200;
-        getPlayer().y = GROUND_Y;
-        getFarmer().x = 1150;
-        getFarmer().state = 'chase';
+        // Set camera to 0 so world positions = screen positions
+        const cam = getCamera();
+        cam.x = 0;
         
-        spawnOven(1400, GROUND_Y, 3, 0.5);
-        spawnKnife(1500, GROUND_Y, 2, 0.4);
+        // Turkey on the tiled floor at (500, 570)
+        getPlayer().x = 500;
+        getPlayer().y = GROUND_Y;
+        
+        // Oven with glowing mouth at (300, 400..570)
+        spawnOven(300, GROUND_Y, 3, 0.5);
+        
+        // Carving knife in the air at (420, 380)
+        spawnKnife(420, 380, 2, 0.4);
+        
+        // Counter run along the back (handled in drawKitchen)
+        // Pans hanging (handled in drawKitchen)
     }
     
     addScore(50);

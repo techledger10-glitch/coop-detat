@@ -11,7 +11,7 @@ import { parseUrlParams, getScreenshotMode, setupScreenshotScene, isScreenshotMo
 import { drawTurkey, drawFarmer, drawHayBale, drawOven, drawCarvingKnife,
          drawHayStack, drawCorn, drawExit, drawBarn, drawCounter, drawCrate,
          drawFence } from './art.js';
-import { drawEnvironment } from './environment.js';
+import { drawEnvironment, drawRealBarn, drawWeatherVane, drawSilo } from './environment.js';
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
@@ -151,56 +151,61 @@ function drawTitleScreen(ctx) {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 1280, 720);
     
-    // Draw barn silhouette
-    ctx.fillStyle = '#2F2F2F';
-    ctx.beginPath();
-    ctx.moveTo(200, 500);
-    ctx.lineTo(400, 300);
-    ctx.lineTo(600, 500);
-    ctx.closePath();
-    ctx.fill();
+    // Draw farm background (barn and fence)
+    // Barn at x=60..320, base at y=545
+    drawRealBarn(ctx, 190, 545, 260);
+    // Barn window - lit
+    ctx.fillStyle = '#ffd54f';
+    ctx.fillRect(275, 415, 35, 25);
+    // Weather vane
+    drawWeatherVane(ctx, 190, 365, 260);
+    // Silo for depth
+    drawSilo(ctx, 500, 515, 100);
     
-    // Barn door
-    ctx.fillStyle = '#8B4513';
-    ctx.fillRect(285, 380, 150, 120);
-    
-    // Draw fence
-    ctx.fillStyle = '#8B4513';
-    for (let i = 0; i < 10; i++) {
-        ctx.fillRect(200 + i * 100, 500, 5, 50);
+    // Rail fence running the full width at y=520..545
+    ctx.strokeStyle = '#8b4513';
+    ctx.lineWidth = 4;
+    for (let x = 0; x < 1280 + 200; x += 100) {
+        // Vertical posts
+        ctx.beginPath();
+        ctx.moveTo(x, 520);
+        ctx.lineTo(x, 545);
+        ctx.stroke();
+        // Horizontal rails
+        ctx.beginPath();
+        ctx.moveTo(x - 5, 529);
+        ctx.lineTo(x + 5, 529);
+        ctx.stroke();
     }
-    for (let i = 0; i < 11; i++) {
-        ctx.fillRect(195 + i * 100, 500, 5, 10);
-    }
     
-    // Draw turkey in center
-    drawTurkey(ctx, 640, 380, 30, 1, false, false, 0);
+    // Draw turkey standing at (640, 570), 120 px, looking at viewer
+    drawTurkey(ctx, 640, GROUND_Y, 120, 1, false, false, 0);
     
     // Title text
     ctx.fillStyle = '#FFD700';
     ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('COOP D\'ETAT', 640, 150);
+    ctx.fillText('COOP D\'ETAT', 640, 100);
     
     // Subtitle
     ctx.font = '24px Arial';
     ctx.fillStyle = '#F5DEB3';
-    ctx.fillText('A Turkey Escape Game', 640, 200);
+    ctx.fillText('A Turkey Escape Game', 640, 150);
     
     // Premise
     ctx.font = '18px Arial';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText('A turkey escapes Thanksgiving dinner, chased by a farmer,', 640, 250);
-    ctx.fillText('dodging the oven and the carving knife.', 640, 280);
+    ctx.fillText('A turkey escapes Thanksgiving dinner, chased by a farmer,', 640, 200);
+    ctx.fillText('dodging the oven and the carving knife.', 640, 230);
     
     // Controls
     ctx.font = '16px Arial';
     ctx.fillStyle = '#FFD700';
-    ctx.fillText('CONTROLS', 640, 340);
+    ctx.fillText('CONTROLS', 640, 280);
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText('Arrow Keys: Move', 640, 370);
-    ctx.fillText('Shift: Sprint (depletes stamina)', 640, 400);
-    ctx.fillText('Space: Jump', 640, 430);
+    ctx.fillText('Arrow Keys: Move', 640, 310);
+    ctx.fillText('Shift: Sprint (depletes stamina)', 640, 340);
+    ctx.fillText('Space: Jump', 640, 370);
     ctx.fillText('Press SPACE to start', 640, 500);
 }
 
