@@ -1,5 +1,12 @@
 # COOP D'ETAT: Turkey Escape Game
 
+[![make.fun · turkey-run-game-01](https://make.fun/badge/turkey-run-game-01.svg)](https://make.fun/bounty/turkey-run-game-01?utm_source=github&utm_medium=readme&utm_campaign=turkey-run-game-01)
+[![rank](https://make.fun/badge/turkey-run-game-01/techledger10-glitch/coop-detat/rank.svg)](https://make.fun/bounty/turkey-run-game-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=turkey-run-game-01)
+[![reward](https://make.fun/badge/turkey-run-game-01/techledger10-glitch/coop-detat/reward.svg)](https://make.fun/bounty/turkey-run-game-01?utm_source=github&utm_medium=readme&utm_campaign=turkey-run-game-01)
+
+Entered in the [make.fun turkey bounty](https://make.fun/bounty/turkey-run-game-01).
+
+
 A 2D canvas game where a turkey escapes Thanksgiving dinner, chased by a farmer, dodging the oven and the carving knife.
 
 ## Game Description
