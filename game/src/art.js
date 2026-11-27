@@ -232,6 +232,7 @@ function drawOven(ctx, x, y, size, glowing) {
     const orangeColor = '#FF4500';
     const glowColor = '#FFA500';
     const interiorColor = glowing ? '#FF6347' : '#4B0082';
+    const tanColor = '#D2B48C';
     
     // Oven body
     ctx.fillStyle = grayColor;

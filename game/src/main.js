@@ -87,7 +87,7 @@ function gameLoop(timestamp) {
         drawPauseScreen(ctx);
     } else if (isCaught() || isEscaped()) {
         renderGame();
-        drawEndScreen(isCaught() ? 'caught' : 'escaped');
+        drawEndScreen(ctx, isCaught() ? 'caught' : 'escaped');
     }
     
     requestAnimationFrame(gameLoop);
