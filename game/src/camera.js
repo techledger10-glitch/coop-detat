@@ -32,11 +32,15 @@ function getCanvasHeight() {
 function updateCamera(dt) {
     const player = getPlayer();
     
-    // Follow player horizontally
-    if (player.x > camera.x + CANVAS_WIDTH * 0.5) {
-        camera.x = player.x - CANVAS_WIDTH * 0.5;
-    } else if (player.x < camera.x + CANVAS_WIDTH * 0.5) {
-        camera.x = player.x - CANVAS_WIDTH * 0.5;
+    // Follow player horizontally - keep player in center third of screen
+    const centerZone = CANVAS_WIDTH * 0.5;
+    const leftBoundary = camera.x + centerZone;
+    const rightBoundary = camera.x + centerZone;
+    
+    if (player.x > rightBoundary) {
+        camera.x = player.x - rightBoundary - 100;
+    } else if (player.x < leftBoundary) {
+        camera.x = player.x - leftBoundary + 100;
     }
     
     // Clamp to world bounds
