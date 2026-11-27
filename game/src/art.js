@@ -20,69 +20,116 @@ function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
     const redColor = '#B22222';
     const whiteColor = '#F5DEB3';
     const blackColor = '#2F1B0C';
+    const yellowColor = '#FFD700';
+    const greenColor = '#228B22';
     
-    // Body
+    // Fan tail - drawn BEHIND the body, anchored at body's rear
+    const tailRotation = Math.sin(animationTime * 5) * 0.1;
+    ctx.fillStyle = featherColor;
+    ctx.save();
+    ctx.translate(-10, 0); // Anchor at body's rear
+    ctx.rotate(tailRotation);
+    const fanAngle = 0.5;
+    for (let i = 0; i < 5; i++) {
+        const angle = (i / 5) * fanAngle - fanAngle / 2;
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(5, -5, 8, -10, 8, -20);
+        ctx.bezierCurveTo(8, -30, 5, -35, 0, -38);
+        ctx.fill();
+        ctx.restore();
+    }
+    ctx.restore();
+    
+    // Body - rounded with lighter belly
     ctx.fillStyle = bodyColor;
     ctx.beginPath();
-    ctx.ellipse(-10, 0, 12, 15, 0, 0, Math.PI * 2);
+    ctx.ellipse(-10, 0, 15, 25, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Chest feather (spreads when sprinting)
-    const featherSpread = sprinting ? 1.5 : 1;
-    ctx.fillStyle = featherColor;
+    // Lighter belly
+    ctx.fillStyle = '#CD853F';
     ctx.beginPath();
-    for (let i = 0; i < 5; i++) {
-        const angle = (i / 5) * Math.PI * 2;
-        ctx.moveTo(-10, 0);
-        ctx.bezierCurveTo(
-            -10 + Math.cos(angle) * 8 * featherSpread,
-            Math.sin(angle) * 6,
-            -15 + Math.cos(angle) * 5 * featherSpread,
-            Math.sin(angle) * 10,
-            -18,
-            0
-        );
-    }
+    ctx.ellipse(-10, 5, 12, 15, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Tail (fan shaped when sprinting) - always attached to body
-    ctx.fillStyle = featherColor;
+    // Head on short neck
+    ctx.fillStyle = bodyColor;
+    ctx.beginPath();
+    ctx.moveTo(8, -15);
+    ctx.bezierCurveTo(12, -25, 8, -35, 4, -38);
+    ctx.fill();
+    
+    // Snood - red over beak
+    ctx.fillStyle = redColor;
+    ctx.beginPath();
+    ctx.arc(6, -38, 5, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Beak - yellow
+    ctx.fillStyle = yellowColor;
+    ctx.beginPath();
+    ctx.moveTo(11, -36);
+    ctx.lineTo(18, -36);
+    ctx.lineTo(11, -30);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Wattle - red under beak
+    ctx.fillStyle = redColor;
+    ctx.beginPath();
+    ctx.ellipse(8, -28, 3, 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Eye - black with white highlight
+    ctx.fillStyle = blackColor;
+    ctx.beginPath();
+    ctx.arc(4, -32, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = whiteColor;
+    ctx.beginPath();
+    ctx.arc(4.5, -31, 1, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Wings - folded on body, flapping when jumping
     if (sprinting) {
-        const fanAngle = 0.3;
-        for (let i = 0; i < 6; i++) {
-            const angle = (i / 5) * fanAngle - fanAngle / 2;
-            ctx.save();
-            ctx.rotate(angle);
-            ctx.beginPath();
-            ctx.moveTo(-15, 0);
-            ctx.bezierCurveTo(-20, -3, -22, -8, -18, -12);
-            ctx.bezierCurveTo(-22, -16, -20, -20, -15, -19);
-            ctx.fill();
-            ctx.restore();
-        }
-    } else {
+        const flap = Math.sin(animationTime * 10) * 0.2;
+        ctx.fillStyle = featherColor;
         ctx.beginPath();
-        ctx.moveTo(-15, 0);
-        ctx.bezierCurveTo(-18, -3, -20, -8, -16, -12);
-        ctx.bezierCurveTo(-20, -16, -18, -20, -15, -19);
+        ctx.moveTo(-10, -5);
+        ctx.bezierCurveTo(-20, -10 + flap, -20, 5 + flap, -10, 0);
+        ctx.fill();
+    } else {
+        ctx.fillStyle = featherColor;
+        ctx.beginPath();
+        ctx.moveTo(-10, -5);
+        ctx.bezierCurveTo(-18, -8, -18, 5, -10, 0);
         ctx.fill();
     }
     
-    // Neck
-    ctx.fillStyle = bodyColor;
+    // Legs - orange, alternating with run cycle
+    const legOffset = Math.sin(animationTime * 5) * 2;
+    ctx.fillStyle = orangeColor;
     ctx.beginPath();
-    ctx.moveTo(3, -1);
-    ctx.bezierCurveTo(5, -8, 0, -10, -5, -8);
-    ctx.fill();
-    
-    // Feet
-    ctx.fillStyle = whiteColor;
-    ctx.beginPath();
-    ctx.moveTo(-5, 12);
-    ctx.lineTo(-7, 18);
-    ctx.lineTo(-3, 18);
+    ctx.moveTo(-6, 15);
+    ctx.lineTo(-8, 20);
+    ctx.lineTo(-4, 20);
     ctx.closePath();
     ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-14, 15);
+    ctx.lineTo(-16, 20);
+    ctx.lineTo(-12, 20);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Three-toed feet on ground
+    ctx.fillStyle = greenColor;
+    ctx.fillRect(-7, 20, 2, 4);
+    ctx.fillRect(-5, 20, 2, 4);
+    ctx.fillRect(-6, 24, 1, 4);
     
     ctx.restore();
 }
@@ -260,27 +307,32 @@ function drawCarvingKnife(ctx, x, y, size, spinning) {
     const handleColor = '#8B4513';
     const bladeColor = '#A9A9A9';
     const tanColor = '#D2B48C';
+    const bolsterColor = '#8B4513';
     
-    // Blade
+    // Blade - long steel blade with bright edge
     ctx.fillStyle = bladeColor;
-    ctx.fillRect(0, -20, 4, 10);
+    ctx.fillRect(-2, -30, 4, 18);
     
-    // Sharp edge
+    // Bright steel edge
     ctx.fillStyle = steelColor;
     ctx.beginPath();
-    ctx.moveTo(0, -20);
-    ctx.lineTo(6, -15);
-    ctx.lineTo(0, -14);
+    ctx.moveTo(-2, -30);
+    ctx.lineTo(2, -28);
+    ctx.lineTo(0, -12);
     ctx.closePath();
     ctx.fill();
     
-    // Handle
-    ctx.fillStyle = handleColor;
-    ctx.fillRect(0, -10, 4, 15);
+    // Bolster - between blade and handle
+    ctx.fillStyle = bolsterColor;
+    ctx.fillRect(-3, -12, 6, 3);
     
-    // Handle grip
+    // Handle - dark wooden
+    ctx.fillStyle = handleColor;
+    ctx.fillRect(-2, -9, 4, 15);
+    
+    // Handle grip - tan
     ctx.fillStyle = tanColor;
-    ctx.fillRect(0, -5, 4, 5);
+    ctx.fillRect(-2, -4, 4, 5);
     
     ctx.restore();
 }
@@ -307,11 +359,11 @@ function drawHayStack(ctx, x, y, size) {
     ctx.restore();
 }
 
-// Corn: feet at y=10 in local coords at base size
-const CORN_FOOT_OFFSET = 10;
+// Corn: 34 px tall, sitting on ground line
+const CORN_FOOT_OFFSET = 17;
 
 function drawCorn(ctx, x, y, size) {
-    const scale = size / 30;
+    const scale = size / 34;
     ctx.save();
     // y is feet position, need to offset so feet are at y
     ctx.translate(x, y - CORN_FOOT_OFFSET * scale);
@@ -319,8 +371,19 @@ function drawCorn(ctx, x, y, size) {
     
     const yellowColor = '#FFD700';
     const goldColor = '#FFD700';
+    const greenColor = '#228B22';
     
-    // Corn cob
+    // Green husk - peeling back
+    ctx.fillStyle = greenColor;
+    ctx.beginPath();
+    ctx.moveTo(-3, 0);
+    ctx.quadraticCurveTo(-5, -10, -3, -20);
+    ctx.lineTo(3, -20);
+    ctx.quadraticCurveTo(5, -10, 3, 0);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Corn cob - center
     ctx.strokeStyle = goldColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -328,12 +391,12 @@ function drawCorn(ctx, x, y, size) {
     ctx.lineTo(0, 10);
     ctx.stroke();
     
-    // Kernels
-    for (let i = 0; i < 10; i++) {
-        ctx.fillStyle = yellowColor;
-        const angle = (i / 10) * Math.PI * 2;
-        const kernelX = Math.cos(angle) * 3;
-        const kernelY = -15 + (i / 10) * 25;
+    // Kernels on cob
+    ctx.fillStyle = yellowColor;
+    for (let i = 0; i < 8; i++) {
+        const angle = (i / 7) * Math.PI * 1.5 - Math.PI / 2;
+        const kernelX = Math.cos(angle) * 2.5;
+        const kernelY = -15 + (i / 7) * 25;
         ctx.beginPath();
         ctx.moveTo(0, kernelY);
         ctx.lineTo(kernelX, kernelY - 2);
