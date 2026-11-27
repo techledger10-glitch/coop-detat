@@ -5,7 +5,7 @@ import { getPlayer, updatePlayer, resetPlayer } from './player.js';
 import { getFarmer, updateFarmer, resetFarmer, setPatrolRoute, getChaseTime } from './farmer.js';
 import { getCamera, updateCamera } from './camera.js';
 import { getHud, resetHud, addScore, damagePlayer } from './hud.js';
-import { getLevel, getLevelCount } from './levels.js';
+import { getLevel, getLevelCount, GROUND_Y } from './levels.js';
 import { resetHazards, updateKnives, updateOvens, updateCorn, getKnives, getOvens, getCorn } from './hazards.js';
 import { parseUrlParams, getScreenshotMode, setupScreenshotScene, isScreenshotMode } from './screenshots.js';
 import { drawTurkey, drawFarmer, drawHayBale, drawOven, drawCarvingKnife,
@@ -220,94 +220,105 @@ function drawPauseScreen(ctx) {
 }
 
 function drawEndScreen(ctx, result) {
-    // Background
-    ctx.fillStyle = result === 'caught' ? '#8B4513' : '#2F2F2F';
-    ctx.fillRect(0, 0, 1280, 720);
-    
     if (result === 'caught') {
-        // Draw sad farmer silhouette
-        ctx.fillStyle = '#696969';
-        ctx.beginPath();
-        ctx.moveTo(200, 500);
-        ctx.lineTo(400, 300);
-        ctx.lineTo(600, 500);
-        ctx.closePath();
-        ctx.fill();
-        
-        // Draw fallen turkey (sad face)
-        ctx.fillStyle = '#8B4513';
-        ctx.beginPath();
-        ctx.arc(640, 500, 20, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Sad eyes
-        ctx.fillStyle = '#B22222';
-        ctx.beginPath();
-        ctx.arc(630, 495, 3, 0, Math.PI * 2);
-        ctx.arc(650, 495, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Sad mouth
-        ctx.strokeStyle = '#B22222';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(640, 505, 10, 0, Math.PI);
-        ctx.stroke();
+        drawCaughtScreen(ctx);
     } else {
-        // Draw exit open
-        ctx.fillStyle = '#4ECDC4';
-        ctx.fillRect(600, 400, 80, 100);
-        
-        // Draw happy turkey
-        ctx.fillStyle = '#FFD700';
-        ctx.beginPath();
-        ctx.arc(640, 350, 20, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Happy eyes
-        ctx.fillStyle = '#228B22';
-        ctx.beginPath();
-        ctx.arc(630, 345, 3, 0, Math.PI * 2);
-        ctx.arc(650, 345, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Happy mouth
-        ctx.strokeStyle = '#228B22';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(640, 355, 10, 0, Math.PI);
-        ctx.stroke();
-        
-        // Lots of confetti
-        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF8C00', '#9B59B6', '#2ECC71', '#3498DB', '#E74C3C'];
-        for (let i = 0; i < 50; i++) {
-            ctx.fillStyle = colors[i % colors.length];
-            const x = 640 + (i - 25) * 20 + Math.random() * 30;
-            const y = 380 + Math.sin(i * 0.5) * 50 + Math.random() * 30;
-            ctx.fillRect(x, y, 4, 4);
-        }
+        drawEscapedScreen(ctx);
     }
-    
-    // Freeze frame overlay
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.fillRect(0, 0, 1280, 720);
     
     // End message
     ctx.globalAlpha = 1;
     ctx.fillStyle = result === 'caught' ? '#FF6B6B' : '#4ECDC4';
     ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(result === 'caught' ? 'CAUGHT!' : 'ESCAPED!', 640, 200);
+    ctx.fillText(result === 'caught' ? 'CAUGHT!' : 'ESCAPED!', 640, 100);
     
     // Score
     ctx.font = '24px Arial';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(`Final Score: ${getHud().score}`, 640, 260);
+    ctx.fillText(`Final Score: ${getHud().score}`, 640, 150);
     
     // Restart prompt
     ctx.font = '18px Arial';
     ctx.fillStyle = '#FFD700';
     ctx.fillText('Press R to restart', 640, 650);
+}
+
+function drawCaughtScreen(ctx) {
+    // Background - farmyard at sunset
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, 720);
+    skyGrad.addColorStop(0, '#8B4513');
+    skyGrad.addColorStop(0.5, '#CD853F');
+    skyGrad.addColorStop(1, '#654321');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, 1280, 720);
+    
+    // Draw barn silhouette
+    ctx.fillStyle = '#2F2F2F';
+    ctx.beginPath();
+    ctx.moveTo(200, 500);
+    ctx.lineTo(400, 300);
+    ctx.lineTo(600, 500);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Barn window - lit
+    ctx.fillStyle = '#ffd54f';
+    ctx.fillRect(385, 380, 35, 25);
+    
+    // Draw farmer at GROUND_Y (570) holding turkey
+    const farmerY = GROUND_Y;
+    drawFarmer(ctx, 640, farmerY, 150, 1, 0);
+    
+    // Turkey being held by farmer (offset to farmer's hands)
+    // Turkey is X-eyed and comic - drawn larger
+    drawTurkey(ctx, 640, farmerY, 100, -1, false, true, 0);
+    
+    // Add X eyes to turkey
+    ctx.fillStyle = '#FF0000';
+    ctx.beginPath();
+    ctx.arc(635, GROUND_Y - 50, 4, 0, Math.PI * 2);
+    ctx.arc(665, GROUND_Y - 50, 4, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function drawEscapedScreen(ctx) {
+    // Background - sunrise sky
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, 720);
+    skyGrad.addColorStop(0, '#8B4513');
+    skyGrad.addColorStop(0.3, '#FF8C00');
+    skyGrad.addColorStop(0.6, '#FFD700');
+    skyGrad.addColorStop(1, '#FFFFFF');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, 1280, 720);
+    
+    // Ground
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(0, 570, 1280, 150);
+    
+    // Draw the gate (exit) at GROUND_Y
+    const gateX = 1100;
+    const gateY = GROUND_Y;
+    
+    // Gate frame
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(gateX - 10, gateY - 50, 20, 50);
+    
+    // Gate is open (horizontal bar)
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(gateX - 10, gateY, 20, 5);
+    
+    // Turkey escaping through gate - running
+    drawTurkey(ctx, gateX + 30, GROUND_Y, 100, 1, true, false, 0);
+    
+    // Confetti - lots of it!
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF8C00', '#9B59B6', '#2ECC71', '#3498DB', '#E74C3C'];
+    for (let i = 0; i < 100; i++) {
+        ctx.fillStyle = colors[i % colors.length];
+        const x = 640 + (i - 50) * 15 + Math.random() * 20;
+        const y = 380 + Math.sin(i * 0.5) * 50 + Math.random() * 100;
+        ctx.fillRect(x, y, 4, 4);
+    }
 }
 
 function renderGame() {
@@ -353,12 +364,12 @@ function renderGame() {
         drawCorn(ctx, c.x - cam.x, c.y, 20);
     }
     
-    // Render player (turkey)
-    drawTurkey(ctx, player.x - cam.x, player.y, 30, player.facing, 
+    // Render player (turkey) - scaled to ~100px tall
+    drawTurkey(ctx, player.x - cam.x, player.y, 100, player.facing, 
                player.sprinting, player.hidden, player.animationTime);
     
-    // Render farmer
-    drawFarmer(ctx, farmer.x - cam.x, farmer.y, 35, farmer.facing, farmer.animationTime);
+    // Render farmer - scaled to ~150px tall
+    drawFarmer(ctx, farmer.x - cam.x, farmer.y, 150, farmer.facing, farmer.animationTime);
 }
 
 function checkCollisions() {

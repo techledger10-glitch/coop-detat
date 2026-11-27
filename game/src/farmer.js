@@ -1,9 +1,10 @@
 // Farmer AI with patrol, vision, chase, and search behavior
 import { playFootstep, playChaseMotif } from './audio.js';
+import { GROUND_Y } from './levels.js';
 
 let farmer = {
     x: 50,
-    y: 0,
+    y: GROUND_Y,
     vx: 0,
     vy: 0,
     width: 25,
@@ -92,6 +93,12 @@ function updateFarmer(dt, player, level) {
     farmer.x += farmer.vx * dt;
     farmer.y += farmer.vy * dt;
     
+    // Ground collision
+    if (farmer.y > GROUND_Y - farmer.height) {
+        farmer.y = GROUND_Y - farmer.height;
+        farmer.vy = 0;
+    }
+    
     // Update animation
     farmer.animationTime += dt;
     
@@ -127,7 +134,7 @@ function getChaseTime() {
 function resetFarmer() {
     farmer = {
         x: 50,
-        y: 0,
+        y: GROUND_Y,
         vx: 0,
         vy: 0,
         width: 25,

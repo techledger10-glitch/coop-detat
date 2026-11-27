@@ -1,10 +1,17 @@
 // Procedural vector art for all game sprites
 // Autumn palette: rust, wheat, deep brown, cream, olive
+// All draw functions receive (x, y) where y is the feet position, and draw so the bottom of the sprite is at y
+
+import { GROUND_Y } from './levels.js';
+
+// Turkey: feet at y=18 in local coords at base size
+const TURKEY_FOOT_OFFSET = 18;
 
 function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
     const scale = size / 40;
     ctx.save();
-    ctx.translate(x, y);
+    // y is feet position, need to offset so feet are at y
+    ctx.translate(x, y - TURKEY_FOOT_OFFSET * scale);
     ctx.scale(scale, scale);
     
     const bodyColor = hidden ? '#654321' : '#8B4513';
@@ -109,10 +116,14 @@ function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
     ctx.restore();
 }
 
+// Farmer: feet at y=21 in local coords at base size
+const FARMER_FOOT_OFFSET = 21;
+
 function drawFarmer(ctx, x, y, size, facing, animationTime) {
     const scale = size / 40;
     ctx.save();
-    ctx.translate(x, y);
+    // y is feet position, need to offset so feet are at y
+    ctx.translate(x, y - FARMER_FOOT_OFFSET * scale);
     ctx.scale(scale, scale);
     
     const brownColor = '#8B4513';
@@ -260,10 +271,14 @@ function drawOven(ctx, x, y, size, glowing) {
     ctx.restore();
 }
 
+// Carving Knife: feet at y=5 in local coords at base size
+const KNIFE_FOOT_OFFSET = 5;
+
 function drawCarvingKnife(ctx, x, y, size, spinning) {
     const scale = size / 40;
     ctx.save();
-    ctx.translate(x, y);
+    // y is feet position, need to offset so feet are at y
+    ctx.translate(x, y - KNIFE_FOOT_OFFSET * scale);
     ctx.scale(scale, scale);
     
     if (spinning) {
@@ -321,10 +336,14 @@ function drawHayStack(ctx, x, y, size) {
     ctx.restore();
 }
 
+// Corn: feet at y=10 in local coords at base size
+const CORN_FOOT_OFFSET = 10;
+
 function drawCorn(ctx, x, y, size) {
     const scale = size / 30;
     ctx.save();
-    ctx.translate(x, y);
+    // y is feet position, need to offset so feet are at y
+    ctx.translate(x, y - CORN_FOOT_OFFSET * scale);
     ctx.scale(scale, scale);
     
     const yellowColor = '#FFD700';
@@ -355,10 +374,14 @@ function drawCorn(ctx, x, y, size) {
     ctx.restore();
 }
 
+// Exit: feet at y=40 in local coords at base size
+const EXIT_FOOT_OFFSET = 40;
+
 function drawExit(ctx, x, y, size, opening) {
     const scale = size / 40;
     ctx.save();
-    ctx.translate(x, y);
+    // y is feet position, need to offset so feet are at y
+    ctx.translate(x, y - EXIT_FOOT_OFFSET * scale);
     ctx.scale(scale, scale);
     
     const brownColor = '#8B4513';

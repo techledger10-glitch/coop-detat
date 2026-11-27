@@ -59,17 +59,17 @@ function drawFarmyard(ctx, camX) {
     }
     
     // Distant barn silhouette with glowing window
-    ctx.fillStyle = '#2f2f2f';
-    ctx.beginPath();
-    ctx.moveTo(300, 500);
-    ctx.lineTo(500, 300);
-    ctx.lineTo(700, 500);
-    ctx.closePath();
-    ctx.fill();
+    drawRealBarn(ctx, 300, 500, 200);
     
-    // Barn window - lit
+    // Barn window - lit (hayloft window)
     ctx.fillStyle = '#ffd54f';
     ctx.fillRect(385, 380, 35, 25);
+    
+    // Weather vane on barn roof
+    drawWeatherVane(ctx, 500, 280);
+    
+    // Silo for depth (further back)
+    drawSilo(ctx, 650, 480, 80);
     
     // Rail fence running the length
     const fenceStart = (-camX * 0.5) % 100;
@@ -288,6 +288,116 @@ function drawKitchen(ctx, camX) {
     // Carving knife (throwing)
     ctx.fillStyle = '#c0c0c0';
     ctx.fillRect(870, 490, 6, 16);
+}
+
+function drawRealBarn(ctx, x, y, size) {
+    const scale = size / 100;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    
+    const brownColor = '#8B4513';
+    const grayColor = '#696969';
+    const darkGray = '#2F2F2F';
+    const whiteColor = '#F5DEB3';
+    
+    // Barn walls - plank style
+    ctx.fillStyle = brownColor;
+    // Main structure
+    ctx.fillRect(-40, 0, 80, 80);
+    
+    // Plank lines
+    ctx.strokeStyle = darkGray;
+    ctx.lineWidth = 2;
+    for (let i = -30; i < 50; i += 20) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, 80);
+        ctx.stroke();
+    }
+    
+    // Gambrel roof (barn roof style)
+    ctx.fillStyle = darkGray;
+    ctx.beginPath();
+    // Back slope (steeper)
+    ctx.moveTo(-45, 0);
+    ctx.lineTo(-20, -60);
+    ctx.lineTo(20, -60);
+    // Front slope (shallower)
+    ctx.lineTo(45, 0);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Big door with white X brace
+    ctx.fillStyle = brownColor;
+    ctx.fillRect(-10, 20, 20, 60);
+    
+    // White X brace
+    ctx.strokeStyle = whiteColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-10, 20);
+    ctx.lineTo(10, 80);
+    ctx.moveTo(10, 20);
+    ctx.lineTo(-10, 80);
+    ctx.stroke();
+    
+    ctx.restore();
+}
+
+function drawWeatherVane(ctx, x, y) {
+    ctx.save();
+    ctx.translate(x, y);
+    
+    const grayColor = '#696969';
+    const redColor = '#B22222';
+    
+    // Weather vane post
+    ctx.fillStyle = grayColor;
+    ctx.fillRect(0, 0, 2, 40);
+    
+    // Arrow pointing north
+    ctx.fillStyle = redColor;
+    ctx.beginPath();
+    ctx.moveTo(0, -10);
+    ctx.lineTo(-5, 5);
+    ctx.lineTo(5, 5);
+    ctx.closePath();
+    ctx.fill();
+    
+    // North marker
+    ctx.fillStyle = redColor;
+    ctx.fillRect(-1, -12, 2, 3);
+    
+    ctx.restore();
+}
+
+function drawSilo(ctx, x, y, size) {
+    const scale = size / 100;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    
+    const brownColor = '#8B4513';
+    const darkGray = '#2F2F2F';
+    
+    // Silo body
+    ctx.fillStyle = darkGray;
+    ctx.fillRect(-5, 0, 10, 60);
+    
+    // Silo door
+    ctx.fillStyle = brownColor;
+    ctx.fillRect(-4, 20, 8, 20);
+    
+    // Door lines
+    ctx.strokeStyle = darkGray;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-4, 30);
+    ctx.lineTo(4, 30);
+    ctx.stroke();
+    
+    ctx.restore();
 }
 
 export { drawEnvironment };

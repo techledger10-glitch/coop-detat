@@ -1,10 +1,11 @@
 // Player (turkey) character
 import { isDown } from './input.js';
 import { playFootstep, playGobble } from './audio.js';
+import { GROUND_Y } from './levels.js';
 
 let player = {
     x: 100,
-    y: 0,
+    y: GROUND_Y,
     vx: 0,
     vy: 0,
     width: 20,
@@ -79,9 +80,8 @@ function updatePlayer(dt, level) {
     player.y += player.vy * dt;
     
     // Simple ground collision (for now)
-    const groundY = 300;
-    if (player.y > groundY - player.height) {
-        player.y = groundY - player.height;
+    if (player.y > GROUND_Y - player.height) {
+        player.y = GROUND_Y - player.height;
         player.vy = 0;
         player.onGround = true;
     }
@@ -104,7 +104,7 @@ function damagePlayer() {
 function resetPlayer() {
     player = {
         x: 100,
-        y: 0,
+        y: GROUND_Y,
         vx: 0,
         vy: 0,
         width: 20,

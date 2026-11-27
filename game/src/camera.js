@@ -32,11 +32,11 @@ function getCanvasHeight() {
 function updateCamera(dt) {
     const player = getPlayer();
     
-    // Follow player horizontally - keep player in center of screen
-    const targetX = player.x - CANVAS_WIDTH * 0.5;
+    // Follow player horizontally - keep player at 40% from left edge
+    const targetX = player.x - CANVAS_WIDTH * 0.4;
     
     // Smooth camera movement
-    camera.x += (targetX - camera.x) * 0.1;
+    camera.x += (targetX - camera.x) * 0.2;
     
     // Clamp to world bounds
     if (camera.x < 0) camera.x = 0;
