@@ -43,16 +43,14 @@ function drawTurkey(ctx, x, y, size, facing, sprinting, hidden, animationTime) {
     }
     ctx.restore();
     
-    // Body - rounded with lighter belly
-    ctx.fillStyle = bodyColor;
+    // Body - rounded brown with lighter belly using gradient
+    const bodyGrad = ctx.createLinearGradient(-10, -25, -10, 15);
+    bodyGrad.addColorStop(0, bodyColor);
+    bodyGrad.addColorStop(0.7, bodyColor);
+    bodyGrad.addColorStop(1, '#CD853F');
+    ctx.fillStyle = bodyGrad;
     ctx.beginPath();
     ctx.ellipse(-10, 0, 15, 25, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Lighter belly
-    ctx.fillStyle = '#CD853F';
-    ctx.beginPath();
-    ctx.ellipse(-10, 5, 12, 15, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Head on short neck

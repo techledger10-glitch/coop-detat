@@ -62,7 +62,8 @@ function drawFarmyard(ctx, camX) {
     
     // Barn: behind the fence, base at y=545, 260 px wide at x=60..320
     // Convert world position to screen position
-    const barnWorldX = 60 + camX; // Barn at world x=60
+    // Move barn to the right so it's fully inside the frame
+    const barnWorldX = 100 + camX; // Barn at world x=100
     const barnScreenX = barnWorldX; // Screen space
     if (barnScreenX > -50 && barnScreenX < 1280) {
         drawRealBarn(ctx, barnScreenX, GROUND_Y - 25, 260);
@@ -312,15 +313,15 @@ function drawRealBarn(ctx, x, y, size) {
     const darkGray = '#2F2F2F';
     const whiteColor = '#F5DEB3';
     
-    // Barn walls - plank style
+    // Barn walls - plank style (100px wide at base)
     ctx.fillStyle = brownColor;
     // Main structure
-    ctx.fillRect(-40, 0, 80, 80);
+    ctx.fillRect(-50, 0, 100, 80);
     
     // Plank lines
     ctx.strokeStyle = darkGray;
     ctx.lineWidth = 2;
-    for (let i = -30; i < 50; i += 20) {
+    for (let i = -40; i < 60; i += 20) {
         ctx.beginPath();
         ctx.moveTo(i, 0);
         ctx.lineTo(i, 80);
@@ -331,11 +332,11 @@ function drawRealBarn(ctx, x, y, size) {
     ctx.fillStyle = darkGray;
     ctx.beginPath();
     // Back slope (steeper)
-    ctx.moveTo(-45, 0);
+    ctx.moveTo(-55, 0);
     ctx.lineTo(-20, -60);
     ctx.lineTo(20, -60);
     // Front slope (shallower)
-    ctx.lineTo(45, 0);
+    ctx.lineTo(55, 0);
     ctx.closePath();
     ctx.fill();
     
