@@ -273,6 +273,7 @@ function drawCarvingKnife(ctx, x, y, size, spinning) {
     const steelColor = '#C0C0C0';
     const handleColor = '#8B4513';
     const bladeColor = '#A9A9A9';
+    const tanColor = '#D2B48C';
     
     // Blade
     ctx.fillStyle = bladeColor;
