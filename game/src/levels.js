@@ -5,6 +5,7 @@ const LEVELS = [
         name: 'Farmyard',
         description: 'Escape through the farmyard - watch for fences and hay bales',
         background: '#8B4513',
+        stage: 0,
         hazards: [],
         obstacles: [
             { type: 'fence', x: 200, y: 0 },
@@ -22,6 +23,7 @@ const LEVELS = [
         name: 'Barn',
         description: 'Navigate the dark barn - use crates and cover to hide',
         background: '#4A4A4A',
+        stage: 1,
         hazards: [
             { type: 'knife', x: 400, y: -50, speed: 2, telegraphTime: 0.5 }
         ],
@@ -39,6 +41,7 @@ const LEVELS = [
         name: 'Kitchen',
         description: 'The kitchen is alive with danger - avoid the ovens and carving knives',
         background: '#2F2F2F',
+        stage: 2,
         hazards: [
             { type: 'oven', x: 400, y: -30, cycleTime: 3, burstDuration: 0.5 },
             { type: 'oven', x: 800, y: 20, cycleTime: 2.5, burstDuration: 0.4 },

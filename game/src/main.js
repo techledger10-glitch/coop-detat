@@ -11,6 +11,7 @@ import { parseUrlParams, getScreenshotMode, setupScreenshotScene, isScreenshotMo
 import { drawTurkey, drawFarmer, drawHayBale, drawOven, drawCarvingKnife,
          drawHayStack, drawCorn, drawExit, drawBarn, drawCounter, drawCrate,
          drawFence } from './art.js';
+import { drawEnvironment } from './environment.js';
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
@@ -315,9 +316,9 @@ function renderGame() {
     const level = getLevel(window.currentLevel || 0);
     const cam = getCamera();
     
-    // Background
-    ctx.fillStyle = level.background || '#8B4513';
-    ctx.fillRect(0, 0, 1280, 720);
+    // Draw environment background
+    const envLevel = { stage: window.currentLevel || 0 };
+    drawEnvironment(ctx, envLevel, cam);
     
     // Render obstacles
     for (const obs of (level.obstacles || [])) {
