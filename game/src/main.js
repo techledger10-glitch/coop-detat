@@ -219,7 +219,75 @@ function drawPauseScreen(ctx) {
 }
 
 function drawEndScreen(ctx, result) {
-    // Freeze frame effect
+    // Background
+    ctx.fillStyle = result === 'caught' ? '#8B4513' : '#2F2F2F';
+    ctx.fillRect(0, 0, 1280, 720);
+    
+    if (result === 'caught') {
+        // Draw sad farmer silhouette
+        ctx.fillStyle = '#696969';
+        ctx.beginPath();
+        ctx.moveTo(200, 500);
+        ctx.lineTo(400, 300);
+        ctx.lineTo(600, 500);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Draw fallen turkey (sad face)
+        ctx.fillStyle = '#8B4513';
+        ctx.beginPath();
+        ctx.arc(640, 500, 20, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Sad eyes
+        ctx.fillStyle = '#B22222';
+        ctx.beginPath();
+        ctx.arc(630, 495, 3, 0, Math.PI * 2);
+        ctx.arc(650, 495, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Sad mouth
+        ctx.strokeStyle = '#B22222';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(640, 505, 10, 0, Math.PI);
+        ctx.stroke();
+    } else {
+        // Draw exit open
+        ctx.fillStyle = '#4ECDC4';
+        ctx.fillRect(600, 400, 80, 100);
+        
+        // Draw happy turkey
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(640, 350, 20, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Happy eyes
+        ctx.fillStyle = '#228B22';
+        ctx.beginPath();
+        ctx.arc(630, 345, 3, 0, Math.PI * 2);
+        ctx.arc(650, 345, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Happy mouth
+        ctx.strokeStyle = '#228B22';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(640, 355, 10, 0, Math.PI);
+        ctx.stroke();
+        
+        // Confetti
+        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF8C00', '#9B59B6'];
+        for (let i = 0; i < 20; i++) {
+            ctx.fillStyle = colors[i % colors.length];
+            const x = 640 + (i - 10) * 30;
+            const y = 450 + Math.sin(i) * 20;
+            ctx.fillRect(x, y, 4, 4);
+        }
+    }
+    
+    // Freeze frame overlay
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
     ctx.fillRect(0, 0, 1280, 720);
     
@@ -239,14 +307,6 @@ function drawEndScreen(ctx, result) {
     ctx.font = '18px Arial';
     ctx.fillStyle = '#FFD700';
     ctx.fillText('Press R to restart', 640, 650);
-    
-    if (result === 'caught') {
-        ctx.fillStyle = '#FF6B6B';
-        ctx.fillText('The farmer got you!', 640, 300);
-    } else {
-        ctx.fillStyle = '#4ECDC4';
-        ctx.fillText('You escaped Thanksgiving!', 640, 300);
-    }
 }
 
 function renderGame() {
